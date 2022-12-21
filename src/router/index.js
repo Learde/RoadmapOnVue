@@ -6,6 +6,9 @@ import AuthView from "@views/AuthView.vue";
 import EditTopic from "@views/EditTopic.vue";
 import TopicView from "@views/TopicView.vue";
 import AddNode from "@views/AddNode.vue";
+import MyRoadmapsView from "@views/MyRoadmapsView.vue";
+import FavouritesView from "@views/FavouritesView.vue";
+import ReadView from "@views/ReadView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +56,21 @@ const router = createRouter({
             props: true,
             name: "addChildNode",
             component: AddNode,
+        },
+        {
+            path: "/my",
+            name: "myRoadMaps",
+            component: MyRoadmapsView,
+        },
+        {
+            path: "/favourites",
+            name: "favourites",
+            component: FavouritesView,
+        },
+        {
+            path: "/read",
+            name: "read",
+            component: ReadView,
         },
     ],
 });

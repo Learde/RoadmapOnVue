@@ -1,9 +1,22 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { getTopic, deleteTopic, getNodes } from "@api";
+import {
+    getTopic,
+    deleteTopic,
+    getNodes,
+    deleteNode,
+    addFavourite,
+    deleteFavourite,
+} from "@api";
 import { showError } from "@packages";
-import { IconPlusBold, IconTrashBold, IconEyeBold } from "@icons";
+import {
+    IconPlusBold,
+    IconTrashBold,
+    IconEyeBold,
+    IconHeartFill,
+    IconHeartBold,
+} from "@icons";
 import { stringEscape } from "@helpers";
 import BaseButton from "@uikit/BaseButton.vue";
 import VueTree from "@ssthouse/vue3-tree-chart";
@@ -30,6 +43,64 @@ const doDelete = async () => {
         showError({
             title: "Ошибка удаления",
             text: "Что-то пошло не так",
+        });
+    }
+};
+
+const handleDeleteNode = async (nodeId) => {
+    try {
+        const nodeData = (
+            await deleteNode({
+                nodeId,
+            })
+        ).data;
+
+        if (nodeData.error) throw "";
+
+        loadNodes();
+    } catch (e) {
+        showError({
+            title: "Ошибка удаления",
+            text: "Что-то пошло не так",
+        });
+    }
+};
+
+const handleFollow = async () => {
+    try {
+        const favData = (
+            await addFavourite({
+                topicId: props.id,
+                userId: 1,
+            })
+        ).data;
+
+        if (favData.error) throw "";
+
+        // TODO: поменять флаг
+    } catch (e) {
+        showError({
+            title: "Ошибка добавления в избранное",
+            text: "Не удалось добавить в избранное, повторите попытку позже",
+        });
+    }
+};
+
+const handleUnfollow = async () => {
+    try {
+        const favData = (
+            await deleteFavourite({
+                topicId: props.id,
+            })
+        ).data;
+
+        if (favData.error) throw "";
+
+        // TODO: поменять флаг
+    } catch (e) {
+        showError({
+            title: "Ошибка добавления в избранное",
+            text: "Не удалось добавить в избранное, повторите попытку позже",
         });
     }
 };
@@ -84,6 +155,17 @@ onMounted(() => {
             <h4 class="topic-view__heading">
                 Просмотр дорожной карты #{{ id }}
             </h4>
+            <BaseButton
+                v-if="true"
+                @click="handleFollow"
+                size="sm"
+                variant="grey"
+            >
+                <IconHeartBold class="topic-view__heart" />
+            </BaseButton>
+            <BaseButton v-else @click="handleUnfollow" size="sm" variant="red">
+                <IconHeartFill class="topic-view__heart" />
+            </BaseButton>
             <BaseButton
                 v-if="!nodes || nodes.length === 0"
                 @click="
@@ -142,7 +224,11 @@ onMounted(() => {
                             <BaseButton size="xxs">
                                 <IconEyeBold />
                             </BaseButton>
-                            <BaseButton variant="red" size="xxs">
+                            <BaseButton
+                                @click="handleDeleteNode(node.id)"
+                                variant="red"
+                                size="xxs"
+                            >
                                 <IconTrashBold />
                             </BaseButton>
                         </div>
@@ -177,6 +263,13 @@ onMounted(() => {
         &--height {
             min-height: 480px;
         }
+    }
+
+    &__heart {
+        height: 18px;
+        width: 18px;
+        position: relative;
+        top: 3px;
     }
 
     &__title {

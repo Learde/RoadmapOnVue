@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { getTopics } from "@api";
+import { getFavourites } from "@api";
 import { showError } from "@packages";
 import { stringEscape } from "@helpers";
 
@@ -8,14 +8,14 @@ const topics = ref(null);
 
 const loadTopics = async () => {
     try {
-        const topicsData = (await getTopics()).data;
+        const topicsData = (await getFavourites()).data;
 
         if (topicsData.error) throw "";
 
         topics.value = topicsData;
     } catch (e) {
         showError({
-            title: "Ошибка загрузки узлов",
+            title: "Ошибка загрузки избранных",
             text: "Что-то пошло не так",
         });
     }
@@ -27,11 +27,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <main class="home-view">
-        <div class="home-view__header">
-            <h4>Список дорожных карт</h4>
+    <main class="favourite-view">
+        <div class="favourite-view__header">
+            <h4>Список избранных дорожных карт</h4>
         </div>
-        <div class="home-view__content" v-if="topics">
+        <div class="favourite-view__content" v-if="topics">
             <div
                 @click="
                     $router.push({
@@ -39,11 +39,11 @@ onMounted(() => {
                         params: { id: topic.id },
                     })
                 "
-                class="home-view__topic"
+                class="favourite-view__topic"
                 v-for="topic in topics"
                 :key="topic.id"
             >
-                <p class="home-view__topic-id">roadmap #{{ topic.id }}</p>
+                <p class="favourite-view__topic-id">roadmap #{{ topic.id }}</p>
                 <h5>{{ topic.title }}</h5>
                 <p>{{ stringEscape(topic.description, 50) }}</p>
             </div>
@@ -52,7 +52,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.home-view {
+.favourite-view {
     width: 100%;
     &__header {
         background-color: var(--rm-c-white);

@@ -15,7 +15,7 @@ const loadTopics = async () => {
         topics.value = topicsData;
     } catch (e) {
         showError({
-            title: "Ошибка загрузки узлов",
+            title: "Ошибка загрузки дорожный карт",
             text: "Что-то пошло не так",
         });
     }
@@ -27,11 +27,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <main class="home-view">
-        <div class="home-view__header">
-            <h4>Список дорожных карт</h4>
+    <main class="my-roadmaps-view">
+        <div class="my-roadmaps-view__header">
+            <h4>Список моих дорожных карт</h4>
         </div>
-        <div class="home-view__content" v-if="topics">
+        <div class="my-roadmaps-view__content" v-if="topics">
             <div
                 @click="
                     $router.push({
@@ -39,11 +39,13 @@ onMounted(() => {
                         params: { id: topic.id },
                     })
                 "
-                class="home-view__topic"
+                class="my-roadmaps-view__topic"
                 v-for="topic in topics"
                 :key="topic.id"
             >
-                <p class="home-view__topic-id">roadmap #{{ topic.id }}</p>
+                <p class="my-roadmaps-view__topic-id">
+                    roadmap #{{ topic.id }}
+                </p>
                 <h5>{{ topic.title }}</h5>
                 <p>{{ stringEscape(topic.description, 50) }}</p>
             </div>
@@ -52,7 +54,7 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.home-view {
+.my-roadmaps-view {
     width: 100%;
     &__header {
         background-color: var(--rm-c-white);

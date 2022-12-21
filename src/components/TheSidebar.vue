@@ -27,23 +27,27 @@ const route = useRoute();
             <IconFilePlus /> Новая карта
         </RouterLink>
         <RouterLink
-            :to="{ name: 'home' }"
+            :to="{ name: 'myRoadMaps' }"
             class="the-sidebar__link"
-            :class="{ 'the-sidebar__link--active': false }"
+            :class="{
+                'the-sidebar__link--active': route.name === 'myRoadMaps',
+            }"
         >
             <IconMarkerCircle /> Мои карты
         </RouterLink>
         <RouterLink
-            :to="{ name: 'home' }"
+            :to="{ name: 'favourites' }"
             class="the-sidebar__link"
-            :class="{ 'the-sidebar__link--active': false }"
+            :class="{
+                'the-sidebar__link--active': route.name === 'favourites',
+            }"
         >
             <IconStar /> Избранные
         </RouterLink>
         <RouterLink
-            :to="{ name: 'home' }"
+            :to="{ name: 'read' }"
             class="the-sidebar__link"
-            :class="{ 'the-sidebar__link--active': false }"
+            :class="{ 'the-sidebar__link--active': route.name === 'read' }"
         >
             <IconBookmarkSimple /> Читаю
         </RouterLink>
