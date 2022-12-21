@@ -55,7 +55,6 @@ const handleLogin = async () => {
 
         // Если все ок, поднимет флаг авторизованности
         useGeneralStore().checkAuthenticatedStatus();
-        console.log(useGeneralStore());
 
         // Идем на главную
         router.push({ name: "home" });

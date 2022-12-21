@@ -7,6 +7,7 @@ import TheSidebar from "@components/TheSidebar.vue";
 
 const generalStore = useGeneralStore();
 const { isAuthenticated } = storeToRefs(generalStore);
+generalStore.checkAuthenticatedStatus();
 </script>
 
 <template>

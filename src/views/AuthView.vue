@@ -34,7 +34,7 @@ import RegistrationForm from "@components/RegistrationForm.vue";
 
 <style lang="scss" scoped>
 .auth-view {
-    height: 100%;
+    height: 100vh;
     width: 100%;
     display: flex;
     justify-content: center;

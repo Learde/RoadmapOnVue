@@ -5,3 +5,4 @@ export { setBaseUrl, setHeaders, addHeaders, setToken } from "./config.js";
 // Endpoints
 export * from "./endpoints/login.js";
 export * from "./endpoints/registration.js";
+export * from "./endpoints/addTopic.js";
