@@ -30,6 +30,12 @@ const router = createRouter({
             component: EditTopic,
         },
         {
+            path: "/edit/topic/:id",
+            props: true,
+            name: "editTopic",
+            component: EditTopic,
+        },
+        {
             path: "/topic/:id",
             props: true,
             name: "viewTopic",

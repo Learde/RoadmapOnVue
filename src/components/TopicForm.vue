@@ -1,12 +1,19 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import BaseFormGroup from "@uikit/BaseFormGroup.vue";
 import BaseInput from "@uikit/BaseInput.vue";
 import BaseTextarea from "@uikit/BaseTextarea.vue";
 import BaseButton from "@uikit/BaseButton.vue";
-import { addTopic } from "@api";
+import { addTopic, getTopic, editTopic } from "@api";
 import { useRouter } from "vue-router";
 import { showError } from "@packages";
+
+const props = defineProps({
+    id: {
+        type: [String, Number],
+        default: null,
+    },
+});
 
 const title = ref(null);
 const description = ref(null);
@@ -19,12 +26,23 @@ const saveTopic = async () => {
     if (disabled.value || saveStarted) return;
     try {
         saveStarted = true;
-        const saveResult = (
-            await addTopic({
-                title: title.value,
-                description: description.value,
-            })
-        ).data;
+        let saveResult = null;
+        if (!props.id) {
+            saveResult = (
+                await addTopic({
+                    title: title.value,
+                    description: description.value,
+                })
+            ).data;
+        } else {
+            saveResult = (
+                await editTopic({
+                    id: props.id,
+                    title: title.value,
+                    description: description.value,
+                })
+            ).data;
+        }
 
         if (saveResult.error) throw "";
 
@@ -38,6 +56,32 @@ const saveTopic = async () => {
         saveStarted = false;
     }
 };
+
+const loadTopic = async () => {
+    try {
+        const topicData = (
+            await getTopic({
+                id: props.id,
+            })
+        ).data;
+
+        if (topicData.error) throw "";
+
+        title.value = topicData.title;
+        description.value = topicData.description;
+    } catch (e) {
+        showError({
+            title: "Ошибка загрузки",
+            text: "Что-то пошло не так",
+        });
+    }
+};
+
+onMounted(() => {
+    if (props.id) {
+        loadTopic();
+    }
+});
 </script>
 
 <template>

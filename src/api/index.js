@@ -7,3 +7,5 @@ export * from "./endpoints/login.js";
 export * from "./endpoints/registration.js";
 export * from "./endpoints/addTopic.js";
 export * from "./endpoints/getTopic.js";
+export * from "./endpoints/editTopic.js";
+export * from "./endpoints/deleteTopic.js";

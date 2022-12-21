@@ -1,5 +1,12 @@
 <script setup>
 import TopicForm from "@components/TopicForm.vue";
+
+defineProps({
+    id: {
+        type: [String, Number],
+        default: null,
+    },
+});
 </script>
 
 <template>
@@ -8,7 +15,7 @@ import TopicForm from "@components/TopicForm.vue";
             <h4>Добавление новой дорожной карты</h4>
         </div>
         <div class="edit-topic__content">
-            <TopicForm class="edit-topic__form" />
+            <TopicForm :id="id" class="edit-topic__form" />
         </div>
     </main>
 </template>
