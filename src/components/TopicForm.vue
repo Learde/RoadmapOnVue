@@ -19,7 +19,6 @@ const saveTopic = async () => {
     if (disabled.value || saveStarted) return;
     try {
         saveStarted = true;
-
         const saveResult = (
             await addTopic({
                 title: title.value,
@@ -28,6 +27,8 @@ const saveTopic = async () => {
         ).data;
 
         if (saveResult.error) throw "";
+
+        router.push({ name: "viewTopic", params: { id: saveResult.id } });
     } catch (e) {
         showError({
             title: "Ошибка сохранения",

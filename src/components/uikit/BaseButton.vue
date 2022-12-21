@@ -1,38 +1,79 @@
 <script setup>
 defineEmits(["click"]);
+defineProps({
+    variant: {
+        type: String,
+        default: "primary",
+    },
+    size: {
+        type: String,
+        default: "md",
+    },
+});
 </script>
 
 <template>
-    <button class="b-button" @click="$emit('click')">
+    <button
+        class="b-button"
+        :class="`b-button--${variant} b-button--${size}`"
+        @click="$emit('click')"
+    >
         <slot />
     </button>
 </template>
 
 <style lang="scss" scoped>
 .b-button {
-    font-size: var(--rm-font-size-h5);
     line-height: var(--rm-line-height-h5);
 
-    background-color: var(--rm-c-primary);
     border-radius: var(--rm-border-radius);
-    color: var(--rm-c-white);
     border: 0;
-    padding: 6px 24px;
 
+    color: var(--rm-c-white);
     transition: all 0.15s;
 
     cursor: pointer;
 
-    &:hover {
-        background-color: var(--rm-c-primary-hover);
+    &--md {
+        font-size: var(--rm-font-size-h5);
+        padding: 6px 24px;
     }
 
-    &:active {
-        background-color: var(--rm-c-primary-hover);
+    &--sm {
+        font-size: var(--rm-font-size);
+        padding: 4px 18px;
     }
 
-    &:focus {
-        outline: 2px solid var(--rm-c-blue-4);
+    &--primary {
+        background-color: var(--rm-c-primary);
+
+        &:hover {
+            background-color: var(--rm-c-primary-hover);
+        }
+
+        &:active {
+            background-color: var(--rm-c-primary-hover);
+        }
+
+        &:focus {
+            outline: 2px solid var(--rm-c-blue-4);
+        }
+    }
+
+    &--red {
+        background-color: var(--rm-c-error);
+
+        &:hover {
+            background-color: var(--rm-c-red-4);
+        }
+
+        &:active {
+            background-color: var(--rm-c-red-4);
+        }
+
+        &:focus {
+            outline: 2px solid var(--rm-c-red-3);
+        }
     }
 
     &[disabled] {

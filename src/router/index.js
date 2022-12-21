@@ -4,6 +4,7 @@ import { useGeneralStore } from "@stores";
 import HomeView from "@views/HomeView.vue";
 import AuthView from "@views/AuthView.vue";
 import EditTopic from "@views/EditTopic.vue";
+import TopicView from "@views/TopicView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +28,12 @@ const router = createRouter({
             path: "/add/topic",
             name: "addTopic",
             component: EditTopic,
+        },
+        {
+            path: "/topic/:id",
+            props: true,
+            name: "viewTopic",
+            component: TopicView,
         },
     ],
 });
