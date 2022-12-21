@@ -52,7 +52,9 @@ const route = useRoute();
 
 <style lang="scss" scoped>
 .the-sidebar {
-    position: relative;
+    position: fixed;
+    left: 0;
+    top: var(--rm-header-height);
     z-index: 9;
     padding-top: 4px;
     height: calc(100vh - var(--rm-header-height));
