@@ -13,6 +13,25 @@ export const addNode = ({ title, description, topicId, parentId = null }) => {
     });
 };
 
+export const editNode = ({
+    id,
+    title,
+    description,
+    topicId,
+    parentId = null,
+}) => {
+    return makeRequest({
+        url: `/roadmaps_module/road_node/${id}/`,
+        method: "PUT",
+        data: {
+            title,
+            description,
+            topic_id: topicId,
+            parent_id: parentId,
+        },
+    });
+};
+
 export const deleteNode = ({ nodeId }) => {
     return makeRequest({
         url: `/roadmaps_module/road_node/${nodeId}/`,
@@ -27,5 +46,12 @@ export const getNodes = ({ topicId }) => {
         params: {
             topic_id: topicId,
         },
+    });
+};
+
+export const getNode = ({ id }) => {
+    return makeRequest({
+        url: `/roadmaps_module/road_node/${id}/`,
+        method: "GET",
     });
 };

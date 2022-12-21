@@ -4,7 +4,7 @@ import BaseFormGroup from "@uikit/BaseFormGroup.vue";
 import BaseInput from "@uikit/BaseInput.vue";
 import BaseTextarea from "@uikit/BaseTextarea.vue";
 import BaseButton from "@uikit/BaseButton.vue";
-import { addNode, getTopic, editTopic } from "@api";
+import { addNode, getNode, editNode } from "@api";
 import { useRouter } from "vue-router";
 import { showError } from "@packages";
 
@@ -17,17 +17,21 @@ const props = defineProps({
         type: [String, Number],
         default: null,
     },
-    topicId: [String, Number],
+    topicId: {
+        type: [String, Number],
+        default: null,
+    },
 });
 
 const title = ref(null);
 const description = ref(null);
+const node = ref(null);
 const router = useRouter();
 
 const disabled = computed(() => !title.value || !description.value);
 let saveStarted = false;
 
-const saveTopic = async () => {
+const saveNode = async () => {
     if (disabled.value || saveStarted) return;
     try {
         saveStarted = true;
@@ -43,17 +47,25 @@ const saveTopic = async () => {
             ).data;
         } else {
             saveResult = (
-                await editTopic({
-                    id: props.id,
+                await editNode({
+                    id: node.value.id,
                     title: title.value,
                     description: description.value,
+                    topicId: +node.value.topic_id,
+                    parentId:
+                        node.value.parent_id === null
+                            ? null
+                            : +node.value.parent_id,
                 })
             ).data;
         }
 
         if (saveResult.error) throw "";
 
-        router.push({ name: "viewTopic", params: { id: props.topicId } });
+        router.push({
+            name: "viewTopic",
+            params: { id: props.topicId ?? node.value.topic_id },
+        });
     } catch (e) {
         showError({
             title: "Ошибка сохранения",
@@ -64,18 +76,19 @@ const saveTopic = async () => {
     }
 };
 
-const loadTopic = async () => {
+const loadNode = async () => {
     try {
-        const topicData = (
-            await getTopic({
+        const nodeData = (
+            await getNode({
                 id: props.id,
             })
         ).data;
 
-        if (topicData.error) throw "";
+        if (nodeData.error) throw "";
 
-        title.value = topicData.title;
-        description.value = topicData.description;
+        node.value = nodeData;
+        title.value = nodeData.title;
+        description.value = nodeData.description;
     } catch (e) {
         showError({
             title: "Ошибка загрузки",
@@ -86,7 +99,7 @@ const loadTopic = async () => {
 
 onMounted(() => {
     if (props.id) {
-        loadTopic();
+        loadNode();
     }
 });
 </script>
@@ -110,7 +123,7 @@ onMounted(() => {
                 />
             </BaseFormGroup>
             <BaseButton
-                @click="saveTopic"
+                @click="saveNode"
                 :disabled="disabled"
                 class="node-form__btn"
                 >Сохранить</BaseButton

@@ -221,7 +221,15 @@ onMounted(() => {
                             >
                                 <IconPlusBold />
                             </BaseButton>
-                            <BaseButton size="xxs">
+                            <BaseButton
+                                @click="
+                                    $router.push({
+                                        name: 'viewNode',
+                                        params: { id: node.id },
+                                    })
+                                "
+                                size="xxs"
+                            >
                                 <IconEyeBold />
                             </BaseButton>
                             <BaseButton

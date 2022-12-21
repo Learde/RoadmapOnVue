@@ -1,5 +1,5 @@
 <script setup>
-import TopicForm from "@components/TopicForm.vue";
+import NodeForm from "@components/NodeForm.vue";
 
 defineProps({
     id: {
@@ -10,19 +10,18 @@ defineProps({
 </script>
 
 <template>
-    <main class="edit-topic">
-        <div class="edit-topic__header">
-            <h4 v-if="id === null">Добавление новой дорожной карты</h4>
-            <h4 v-else>Редактирование дорожной карты</h4>
+    <main class="edit-node">
+        <div class="edit-node__header">
+            <h4>Редактирование узла</h4>
         </div>
-        <div class="edit-topic__content">
-            <TopicForm :id="id" class="edit-topic__form" />
+        <div class="edit-node__content">
+            <NodeForm :id="id" class="edit-node__form" />
         </div>
     </main>
 </template>
 
 <style lang="scss" scoped>
-.edit-topic {
+.edit-node {
     width: 100%;
     &__header {
         background-color: var(--rm-c-white);
