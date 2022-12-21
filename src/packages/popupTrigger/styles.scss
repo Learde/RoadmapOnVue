@@ -1,0 +1,48 @@
+.swal2-container .swal2-popup .rm-popup {
+    &__title {
+        font-size: var(--rm-font-size-h2);
+        line-height: var(--rm-line-height-h2);
+        color: var(--rm-c-text);
+    }
+
+    &__text {
+        font-size: var(--rm-font-size-h5);
+        line-height: var(--rm-line-height-h5);
+        color: var(--rm-c-text);
+    }
+
+    &__button {
+        font-size: var(--rm-font-size-h5);
+        line-height: var(--rm-line-height-h5);
+
+        background-color: var(--rm-c-primary);
+        border-radius: var(--rm-border-radius);
+        color: var(--rm-c-white);
+        border: 0;
+        padding: 6px 24px;
+
+        transition: all 0.15s;
+
+        cursor: pointer;
+
+        &:hover {
+            background: var(--rm-c-primary-hover);
+        }
+
+        &:active {
+            background: var(--rm-c-primary-hover);
+        }
+
+        &:focus {
+            outline: 2px solid var(--rm-c-blue-4);
+        }
+
+        &[disabled] {
+            background-color: var(--rm-c-neutral-4);
+            border: 1px solid var(--rm-c-neutral-6);
+            color: var(--rm-c-neutral-6);
+
+            cursor: default;
+        }
+    }
+}

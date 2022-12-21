@@ -1,0 +1,32 @@
+{
+  "name": "roadmaponvue",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+  },
+  "dependencies": {
+    "@iconify-prerendered/vue-fa-regular": "^0.17.1656181869",
+    "@iconify-prerendered/vue-fa6-solid": "^0.17.1668581498",
+    "@iconify-prerendered/vue-ph": "^0.17.1656183091",
+    "axios": "^1.2.1",
+    "date-fns": "^2.29.3",
+    "pinia": "^2.0.28",
+    "sweetalert2": "^11.6.16",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.1.4",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "eslint": "^8.22.0",
+    "eslint-plugin-vue": "^9.3.0",
+    "prettier": "^2.7.1",
+    "sass": "^1.57.1",
+    "vite": "^4.0.0"
+  }
+}
