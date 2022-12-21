@@ -8,3 +8,4 @@ export * from "./endpoints/topic.js";
 export * from "./endpoints/node.js";
 export * from "./endpoints/favourite.js";
 export * from "./endpoints/read.js";
+export * from "./endpoints/user.js";

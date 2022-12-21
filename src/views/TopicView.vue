@@ -18,8 +18,10 @@ import {
     IconHeartBold,
 } from "@icons";
 import { stringEscape } from "@helpers";
+import { useUserStore } from "@stores";
 import BaseButton from "@uikit/BaseButton.vue";
 import VueTree from "@ssthouse/vue3-tree-chart";
+import { storeToRefs } from "pinia";
 const props = defineProps({
     id: [String, Number],
 });
@@ -27,6 +29,8 @@ const props = defineProps({
 const topic = ref(null);
 const nodes = ref(null);
 const router = useRouter();
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 
 const doDelete = async () => {
     try {
@@ -166,22 +170,31 @@ onMounted(() => {
             <BaseButton v-else @click="handleUnfollow" size="sm" variant="red">
                 <IconHeartFill class="topic-view__heart" />
             </BaseButton>
-            <BaseButton
-                v-if="!nodes || nodes.length === 0"
-                @click="
-                    $router.push({ name: 'addNode', params: { topicId: id } })
-                "
-                size="sm"
-                >Добавить корневой узел</BaseButton
+            <template
+                v-if="topic && user && +topic.created_user_id === +user.id"
             >
-            <BaseButton
-                @click="$router.push({ name: 'editTopic', params: { id: id } })"
-                size="sm"
-                >Редактировать</BaseButton
-            >
-            <BaseButton @click="doDelete" size="sm" variant="red"
-                >Удалить</BaseButton
-            >
+                <BaseButton
+                    v-if="!nodes || nodes.length === 0"
+                    @click="
+                        $router.push({
+                            name: 'addNode',
+                            params: { topicId: id },
+                        })
+                    "
+                    size="sm"
+                    >Добавить корневой узел</BaseButton
+                >
+                <BaseButton
+                    @click="
+                        $router.push({ name: 'editTopic', params: { id: id } })
+                    "
+                    size="sm"
+                    >Редактировать</BaseButton
+                >
+                <BaseButton @click="doDelete" size="sm" variant="red"
+                    >Удалить</BaseButton
+                >
+            </template>
         </div>
         <div v-if="topic" class="topic-view__content">
             <h5 class="topic-view__title">Название: {{ topic.title }}</h5>
@@ -208,6 +221,11 @@ onMounted(() => {
                         </div>
                         <div class="topic-view__node-icon">
                             <BaseButton
+                                v-if="
+                                    topic &&
+                                    user &&
+                                    +topic.created_user_id === +user.id
+                                "
                                 @click="
                                     $router.push({
                                         name: 'addChildNode',
@@ -233,6 +251,11 @@ onMounted(() => {
                                 <IconEyeBold />
                             </BaseButton>
                             <BaseButton
+                                v-if="
+                                    topic &&
+                                    user &&
+                                    +topic.created_user_id === +user.id
+                                "
                                 @click="handleDeleteNode(node.id)"
                                 variant="red"
                                 size="xxs"

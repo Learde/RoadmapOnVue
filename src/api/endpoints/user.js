@@ -1,8 +1,15 @@
 import { makeRequest } from "@api";
 
-export const getUser = ({ id }) => {
+export const getUserById = ({ id }) => {
     return makeRequest({
-        url: `/roadmaps_module/road_node/${id}/`,
+        url: `/user_module/user/${id}/`,
+        method: "GET",
+    });
+};
+
+export const getUser = () => {
+    return makeRequest({
+        url: `/user_module/user/`,
         method: "GET",
     });
 };

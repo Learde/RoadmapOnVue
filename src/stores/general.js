@@ -2,6 +2,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import { getCookie, isAuth } from "@helpers";
 import { setToken } from "@api";
+import { useUserStore } from "@stores";
 
 export const useGeneralStore = defineStore("general", () => {
     const isAuthenticated = ref(isAuth());
@@ -13,8 +14,9 @@ export const useGeneralStore = defineStore("general", () => {
         isAuthenticated.value = isAuth();
 
         if (isAuthenticated.value) {
-            console.log(getCookie("jwt"));
             setToken(getCookie("jwt"));
+
+            useUserStore().loadUser();
         }
     }
 
