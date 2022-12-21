@@ -9,3 +9,5 @@ export * from "./endpoints/addTopic.js";
 export * from "./endpoints/getTopic.js";
 export * from "./endpoints/editTopic.js";
 export * from "./endpoints/deleteTopic.js";
+export * from "./endpoints/addNode.js";
+export * from "./endpoints/getNodes.js";

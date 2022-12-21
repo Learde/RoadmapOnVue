@@ -8,4 +8,7 @@ export {
     IconStarFill,
     IconBookmarkSimple,
     IconFilePlus,
+    IconPlusBold,
+    IconTrashBold,
+    IconEyeBold,
 } from "@iconify-prerendered/vue-ph";

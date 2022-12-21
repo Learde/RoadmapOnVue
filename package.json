@@ -12,6 +12,7 @@
     "@iconify-prerendered/vue-fa-regular": "^0.17.1656181869",
     "@iconify-prerendered/vue-fa6-solid": "^0.17.1668581498",
     "@iconify-prerendered/vue-ph": "^0.17.1656183091",
+    "@ssthouse/vue3-tree-chart": "^0.2.6",
     "axios": "^1.2.1",
     "date-fns": "^2.29.3",
     "pinia": "^2.0.28",

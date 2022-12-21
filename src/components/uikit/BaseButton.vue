@@ -44,6 +44,11 @@ defineProps({
         padding: 4px 18px;
     }
 
+    &--xxs {
+        font-size: var(--rm-font-size-small);
+        padding: 2px 8px;
+    }
+
     &--primary {
         background-color: var(--rm-c-primary);
 

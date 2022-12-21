@@ -1,14 +1,18 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { getTopic, deleteTopic } from "@api";
+import { getTopic, deleteTopic, getNodes } from "@api";
 import { showError } from "@packages";
+import { IconPlusBold, IconTrashBold, IconEyeBold } from "@icons";
+import { stringEscape } from "@helpers";
 import BaseButton from "@uikit/BaseButton.vue";
+import VueTree from "@ssthouse/vue3-tree-chart";
 const props = defineProps({
     id: [String, Number],
 });
 
 const topic = ref(null);
+const nodes = ref(null);
 const router = useRouter();
 
 const doDelete = async () => {
@@ -49,17 +53,44 @@ const loadTopic = async () => {
     }
 };
 
+const loadNodes = async () => {
+    try {
+        const nodesData = (
+            await getNodes({
+                topicId: props.id,
+            })
+        ).data;
+
+        if (nodesData.error) throw "";
+
+        nodes.value = nodesData;
+    } catch (e) {
+        showError({
+            title: "Ошибка загрузки узлов",
+            text: "Что-то пошло не так",
+        });
+    }
+};
+
 onMounted(() => {
     loadTopic();
+    loadNodes();
 });
 </script>
 
 <template>
     <main class="topic-view">
         <div class="topic-view__header">
-            <h4>Просмотр дорожной карты #{{ id }}</h4>
-            <BaseButton size="sm" class="topic-view__btn--ml-auto"
-                >Редактировать узлы</BaseButton
+            <h4 class="topic-view__heading">
+                Просмотр дорожной карты #{{ id }}
+            </h4>
+            <BaseButton
+                v-if="!nodes || nodes.length === 0"
+                @click="
+                    $router.push({ name: 'addNode', params: { topicId: id } })
+                "
+                size="sm"
+                >Добавить корневой узел</BaseButton
             >
             <BaseButton
                 @click="$router.push({ name: 'editTopic', params: { id: id } })"
@@ -73,6 +104,51 @@ onMounted(() => {
         <div v-if="topic" class="topic-view__content">
             <h5 class="topic-view__title">Название: {{ topic.title }}</h5>
             <p>Описание: {{ topic.description }}</p>
+        </div>
+        <div
+            v-if="nodes"
+            class="topic-view__content topic-view__content--height"
+        >
+            <VueTree
+                class="topic-view__tree"
+                :dataset="nodes"
+                :config="{ nodeWidth: 200, nodeHeight: 100, levelHeight: 175 }"
+                linkStyle="straight"
+                :collapse-enabled="false"
+            >
+                <template v-slot:node="{ node }">
+                    <div class="topic-view__node">
+                        <div class="topic-view__node-title">
+                            {{ node.title }}
+                        </div>
+                        <div class="topic-view__node-description">
+                            {{ stringEscape(node.description, 37) }}
+                        </div>
+                        <div class="topic-view__node-icon">
+                            <BaseButton
+                                @click="
+                                    $router.push({
+                                        name: 'addChildNode',
+                                        params: {
+                                            topicId: id,
+                                            parentId: node.id,
+                                        },
+                                    })
+                                "
+                                size="xxs"
+                            >
+                                <IconPlusBold />
+                            </BaseButton>
+                            <BaseButton size="xxs">
+                                <IconEyeBold />
+                            </BaseButton>
+                            <BaseButton variant="red" size="xxs">
+                                <IconTrashBold />
+                            </BaseButton>
+                        </div>
+                    </div>
+                </template>
+            </VueTree>
         </div>
     </main>
 </template>
@@ -97,10 +173,50 @@ onMounted(() => {
         padding: var(--rm-container-paddings);
         background-color: var(--rm-c-white);
         border-radius: var(--rm-border-radius);
+
+        &--height {
+            min-height: 480px;
+        }
     }
 
     &__title {
         margin-bottom: 10px;
+    }
+
+    &__node {
+        width: 150px;
+        background-color: var(--rm-c-blue-1);
+        padding: 10px 10px;
+        border-radius: var(--rm-border-radius);
+    }
+
+    &__node-title {
+        font-weight: 700;
+    }
+
+    &__tree {
+        min-height: 450px;
+
+        &:deep(.node-slot) {
+            cursor: default !important;
+        }
+    }
+
+    &__heading {
+        margin-right: auto;
+    }
+
+    &__node-icon {
+        margin-top: 6px;
+        display: flex;
+        justify-content: space-around;
+
+        &:deep(svg) {
+            width: 16px;
+            height: 16px;
+            position: relative;
+            top: 3px;
+        }
     }
 }
 </style>

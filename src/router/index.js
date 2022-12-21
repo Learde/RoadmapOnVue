@@ -5,6 +5,7 @@ import HomeView from "@views/HomeView.vue";
 import AuthView from "@views/AuthView.vue";
 import EditTopic from "@views/EditTopic.vue";
 import TopicView from "@views/TopicView.vue";
+import AddNode from "@views/AddNode.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,18 @@ const router = createRouter({
             props: true,
             name: "viewTopic",
             component: TopicView,
+        },
+        {
+            path: "/topic/:topicId/node/add",
+            props: true,
+            name: "addNode",
+            component: AddNode,
+        },
+        {
+            path: "/topic/:topicId/node/add/:parentId",
+            props: true,
+            name: "addChildNode",
+            component: AddNode,
         },
     ],
 });
