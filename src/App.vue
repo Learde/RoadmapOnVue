@@ -11,7 +11,7 @@ const { isAuthenticated } = storeToRefs(generalStore);
 
 <template>
     <TheHeader v-if="isAuthenticated" />
-    <div class="app-wrapper">
+    <div class="app-wrapper" :class="{ 'app-wrapper--lower': isAuthenticated }">
         <TheSidebar v-if="isAuthenticated" />
         <RouterView />
     </div>
@@ -22,5 +22,9 @@ const { isAuthenticated } = storeToRefs(generalStore);
     height: 100%;
     display: flex;
     flex-direction: row;
+
+    &--lower {
+        height: calc(100% - var(--rm-header-height));
+    }
 }
 </style>

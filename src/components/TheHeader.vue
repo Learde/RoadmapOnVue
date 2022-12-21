@@ -30,7 +30,7 @@ const doLogout = () => {
 <style lang="scss" scoped>
 .the-header {
     width: 100%;
-    background-color: var(--rm-c-blue-8);
+    background-color: var(--rm-c-blue-10);
     height: var(--rm-header-height);
     color: var(--rm-c-white);
     padding: 0 16px;
