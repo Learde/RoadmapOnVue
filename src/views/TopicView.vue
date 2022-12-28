@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import {
     getTopic,
@@ -16,12 +16,14 @@ import {
     IconEyeBold,
     IconHeartFill,
     IconHeartBold,
+    IconHeartBreakFill,
 } from "@icons";
 import { stringEscape } from "@helpers";
-import { useUserStore } from "@stores";
+import { useUserStore, useFavouritesStore } from "@stores";
 import BaseButton from "@uikit/BaseButton.vue";
 import VueTree from "@ssthouse/vue3-tree-chart";
 import { storeToRefs } from "pinia";
+
 const props = defineProps({
     id: [String, Number],
 });
@@ -31,6 +33,8 @@ const nodes = ref(null);
 const router = useRouter();
 const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
+const favouritesStore = useFavouritesStore();
+const favObject = computed(() => favouritesStore.includesTopic(props.id));
 
 const doDelete = async () => {
     try {
@@ -81,7 +85,7 @@ const handleFollow = async () => {
 
         if (favData.error) throw "";
 
-        // TODO: поменять флаг
+        favouritesStore.loadFavourites();
     } catch (e) {
         showError({
             title: "Ошибка добавления в избранное",
@@ -94,13 +98,13 @@ const handleUnfollow = async () => {
     try {
         const favData = (
             await deleteFavourite({
-                topicId: props.id,
+                id: favObject.value.id,
             })
         ).data;
 
         if (favData.error) throw "";
 
-        // TODO: поменять флаг
+        favouritesStore.loadFavourites();
     } catch (e) {
         showError({
             title: "Ошибка добавления в избранное",
@@ -160,15 +164,26 @@ onMounted(() => {
                 Просмотр дорожной карты #{{ id }}
             </h4>
             <BaseButton
-                v-if="true"
+                v-if="!favObject"
                 @click="handleFollow"
                 size="sm"
                 variant="grey"
             >
                 <IconHeartBold class="topic-view__heart" />
             </BaseButton>
-            <BaseButton v-else @click="handleUnfollow" size="sm" variant="red">
-                <IconHeartFill class="topic-view__heart" />
+            <BaseButton
+                class="topic-view__favourite"
+                v-else
+                @click="handleUnfollow"
+                size="sm"
+                variant="red"
+            >
+                <IconHeartFill
+                    class="topic-view__heart topic-view__heart--visible"
+                />
+                <IconHeartBreakFill
+                    class="topic-view__heart topic-view__heart--hidden"
+                />
             </BaseButton>
             <template
                 v-if="topic && user && +topic.created_user_id === +user.id"
@@ -296,11 +311,24 @@ onMounted(() => {
         }
     }
 
+    &__favourite:hover {
+        .topic-view__heart--hidden {
+            display: initial;
+        }
+        .topic-view__heart--visible {
+            display: none;
+        }
+    }
+
     &__heart {
         height: 18px;
         width: 18px;
         position: relative;
         top: 3px;
+
+        &--hidden {
+            display: none;
+        }
     }
 
     &__title {

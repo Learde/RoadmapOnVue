@@ -13,4 +13,5 @@ export {
     IconEyeBold,
     IconHeartBold,
     IconHeartFill,
+    IconHeartBreakFill,
 } from "@iconify-prerendered/vue-ph";

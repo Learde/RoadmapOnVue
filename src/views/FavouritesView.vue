@@ -1,29 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { getFavourites } from "@api";
-import { showError } from "@packages";
 import { stringEscape } from "@helpers";
+import { useFavouritesStore } from "@stores";
+import { storeToRefs } from "pinia";
 
-const topics = ref(null);
-
-const loadTopics = async () => {
-    try {
-        const topicsData = (await getFavourites()).data;
-
-        if (topicsData.error) throw "";
-
-        topics.value = topicsData;
-    } catch (e) {
-        showError({
-            title: "Ошибка загрузки избранных",
-            text: "Что-то пошло не так",
-        });
-    }
-};
-
-onMounted(() => {
-    loadTopics();
-});
+const { favourites } = storeToRefs(useFavouritesStore());
 </script>
 
 <template>
@@ -31,21 +11,23 @@ onMounted(() => {
         <div class="favourite-view__header">
             <h4>Список избранных дорожных карт</h4>
         </div>
-        <div class="favourite-view__content" v-if="topics">
+        <div class="favourite-view__content" v-if="favourites">
             <div
                 @click="
                     $router.push({
                         name: 'viewTopic',
-                        params: { id: topic.id },
+                        params: { id: favourite.topic.id },
                     })
                 "
                 class="favourite-view__topic"
-                v-for="topic in topics"
-                :key="topic.id"
+                v-for="favourite in favourites"
+                :key="favourite.topic.id"
             >
-                <p class="favourite-view__topic-id">roadmap #{{ topic.id }}</p>
-                <h5>{{ topic.title }}</h5>
-                <p>{{ stringEscape(topic.description, 50) }}</p>
+                <p class="favourite-view__favourite.topic-id">
+                    roadmap #{{ favourite.topic.id }}
+                </p>
+                <h5>{{ favourite.topic.title }}</h5>
+                <p>{{ stringEscape(favourite.topic.description, 50) }}</p>
             </div>
         </div>
     </main>

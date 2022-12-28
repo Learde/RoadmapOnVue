@@ -5,7 +5,7 @@ import { getUser } from "@api";
 export const useUserStore = defineStore("user", () => {
     const user = ref(null);
     async function loadUser() {
-        const userData = (await getUser()).data?.[0];
+        const userData = (await getUser()).data;
         if (userData) {
             user.value = userData;
         }
