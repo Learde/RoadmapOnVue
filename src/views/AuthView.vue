@@ -5,7 +5,7 @@ import RegistrationForm from "@components/RegistrationForm.vue";
 
 <template>
     <div class="auth-view">
-        <h1 class="auth-view__heading">RoadMaps</h1>
+        <h1 class="auth-view__heading">RoadMaps on Rails</h1>
         <div class="auth-view__content">
             <div class="auth-view__tabs">
                 <span

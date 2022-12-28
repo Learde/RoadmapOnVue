@@ -9,3 +9,6 @@ export * from "./endpoints/node.js";
 export * from "./endpoints/favourite.js";
 export * from "./endpoints/read.js";
 export * from "./endpoints/user.js";
+export * from "./endpoints/attachment.js";
+export * from "./endpoints/topicRate.js";
+export * from "./endpoints/nodeRate.js";

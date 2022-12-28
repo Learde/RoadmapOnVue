@@ -10,6 +10,7 @@ import {
     deleteFavourite,
     addRead,
     deleteRead,
+    addTopicRate,
 } from "@api";
 import { showError } from "@packages";
 import {
@@ -25,6 +26,8 @@ import {
 import { stringEscape } from "@helpers";
 import { useUserStore, useFavouritesStore, useReadingsStore } from "@stores";
 import BaseButton from "@uikit/BaseButton.vue";
+import BaseTextarea from "@uikit/BaseTextarea.vue";
+import BaseFormGroup from "@uikit/BaseFormGroup.vue";
 import VueTree from "@ssthouse/vue3-tree-chart";
 import { storeToRefs } from "pinia";
 
@@ -195,6 +198,30 @@ const loadNodes = async () => {
     }
 };
 
+const rate = ref(5);
+const comment = ref(null);
+
+const saveComment = async () => {
+    try {
+        const saveData = (
+            await addTopicRate({
+                topicId: +props.id,
+                comment: comment.value,
+                rate: rate.value,
+            })
+        ).data;
+
+        if (saveData.error) throw "";
+
+        loadTopic();
+    } catch (e) {
+        showError({
+            title: "Ошибка комментарования",
+            text: "Что-то пошло не так",
+        });
+    }
+};
+
 onMounted(() => {
     loadTopic();
     loadNodes();
@@ -319,7 +346,10 @@ onMounted(() => {
                                 @click="
                                     $router.push({
                                         name: 'viewNode',
-                                        params: { id: node.id },
+                                        params: {
+                                            id: node.id,
+                                            userId: topic.created_user_id,
+                                        },
                                     })
                                 "
                                 size="xxs"
@@ -342,6 +372,31 @@ onMounted(() => {
                     </div>
                 </template>
             </VueTree>
+        </div>
+        <div v-if="topic?.rates?.length > 0" class="topic-view__content">
+            <h5 class="topic-view__title">Оценки</h5>
+            <div class="topic-view__rate-b" v-for="rate in topic.rates">
+                <h6 style="font-weight: bold;">Рейтинг: {{ rate.rate }} из 5</h6>
+                <p><h6 style="display: inline; font-weight: bold;">Комментарий:</h6> {{ rate.comment }}</p>
+            </div>
+        </div>
+        <div class="topic-view__content">
+            <div class="topic-view__rate-header">
+                <h5 class="topic-view__title">Оценить</h5>
+                <select class="topic-view__rate" v-model="rate">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option selected>5</option>
+                </select>
+            </div>
+            <BaseFormGroup>
+                <BaseTextarea v-model="comment" />
+            </BaseFormGroup>
+            <BaseButton style="margin-top: 20px" @click="saveComment">
+                Сохранить
+            </BaseButton>
         </div>
     </main>
 </template>
@@ -430,6 +485,28 @@ onMounted(() => {
             position: relative;
             top: 3px;
         }
+    }
+
+    &__rate-header {
+        display: flex;
+        align-items: center;
+        column-gap: 50px;
+    }
+
+    &__rate {
+        margin-bottom: 10px;
+        background-color: #fff;
+        border: 1px solid var(--rm-c-border);
+        border-radius: var(--rm-border-radius);
+        padding: 3px 10px;
+        font-size: 16px;
+    }
+
+    &__rate-b {
+        margin-bottom: 20px;
+        border: 1px solid var(--rm-c-border);
+        border-radius: var(--rm-border-radius);
+        padding: 10px 20px;
     }
 }
 </style>

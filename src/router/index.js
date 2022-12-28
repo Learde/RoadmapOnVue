@@ -11,6 +11,7 @@ import FavouritesView from "@views/FavouritesView.vue";
 import ReadView from "@views/ReadView.vue";
 import EditNode from "@views/EditNode.vue";
 import NodeView from "@views/NodeView.vue";
+import EditAttachment from "@views/EditAttachment.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,7 +61,13 @@ const router = createRouter({
             component: EditNode,
         },
         {
-            path: "/topic/node/:id",
+            path: "/:userId/topic/node/edit/:id/attachment/add",
+            props: true,
+            name: "addAttachment",
+            component: EditAttachment,
+        },
+        {
+            path: "/:userId/topic/node/:id",
             props: true,
             name: "viewNode",
             component: NodeView,

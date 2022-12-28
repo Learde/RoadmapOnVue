@@ -16,7 +16,7 @@ const { readings } = storeToRefs(useReadingsStore());
                 @click="
                     $router.push({
                         name: 'viewTopic',
-                        params: { id: topic.id },
+                        params: { id: reading.topic.id },
                     })
                 "
                 class="read-view__topic"
