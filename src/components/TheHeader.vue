@@ -16,7 +16,7 @@ const doLogout = () => {
 
 <template>
     <header class="the-header">
-        <h4>RoadMaps</h4>
+        <h4>RoadMaps on Rails</h4>
         <div class="the-header__profile">
             <span>Профиль</span>
             <div class="the-header__avatar">

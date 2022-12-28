@@ -97,6 +97,22 @@ defineProps({
         }
     }
 
+    &--green {
+        background-color: var(--rm-c-success);
+
+        &:hover {
+            background-color: var(--rm-c-green-4);
+        }
+
+        &:active {
+            background-color: var(--rm-c-green-4);
+        }
+
+        &:focus {
+            outline: 2px solid var(--rm-c-green-3);
+        }
+    }
+
     &[disabled] {
         background-color: var(--rm-c-neutral-4);
         border: 1px solid var(--rm-c-neutral-6);

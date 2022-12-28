@@ -1,29 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { getReads } from "@api";
-import { showError } from "@packages";
 import { stringEscape } from "@helpers";
+import { useReadingsStore } from "@stores";
+import { storeToRefs } from "pinia";
 
-const topics = ref(null);
-
-const loadTopics = async () => {
-    try {
-        const topicsData = (await getReads()).data;
-
-        if (topicsData.error) throw "";
-
-        topics.value = topicsData;
-    } catch (e) {
-        showError({
-            title: "Ошибка загрузки дорожных карт в процессе",
-            text: "Что-то пошло не так",
-        });
-    }
-};
-
-onMounted(() => {
-    loadTopics();
-});
+const { readings } = storeToRefs(useReadingsStore());
 </script>
 
 <template>
@@ -31,7 +11,7 @@ onMounted(() => {
         <div class="read-view__header">
             <h4>Список дорожных карт в процессе</h4>
         </div>
-        <div class="read-view__content" v-if="topics">
+        <div class="read-view__content" v-if="readings">
             <div
                 @click="
                     $router.push({
@@ -40,12 +20,14 @@ onMounted(() => {
                     })
                 "
                 class="read-view__topic"
-                v-for="topic in topics"
-                :key="topic.id"
+                v-for="reading in readings"
+                :key="reading.topic.id"
             >
-                <p class="read-view__topic-id">roadmap #{{ topic.id }}</p>
-                <h5>{{ topic.title }}</h5>
-                <p>{{ stringEscape(topic.description, 50) }}</p>
+                <p class="read-view__topic-id">
+                    roadmap #{{ reading.topic.id }}
+                </p>
+                <h5>{{ reading.topic.title }}</h5>
+                <p>{{ stringEscape(reading.topic.description, 50) }}</p>
             </div>
         </div>
     </main>

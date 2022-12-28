@@ -7,6 +7,8 @@ export {
     IconStar,
     IconStarFill,
     IconBookmarkSimple,
+    IconBookmarkSimpleBold,
+    IconBookmarkSimpleFill,
     IconFilePlus,
     IconPlusBold,
     IconTrashBold,

@@ -23,7 +23,7 @@ const { favourites } = storeToRefs(useFavouritesStore());
                 v-for="favourite in favourites"
                 :key="favourite.topic.id"
             >
-                <p class="favourite-view__favourite.topic-id">
+                <p class="favourite-view__topic-id">
                     roadmap #{{ favourite.topic.id }}
                 </p>
                 <h5>{{ favourite.topic.title }}</h5>

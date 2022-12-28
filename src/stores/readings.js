@@ -11,8 +11,15 @@ export const useReadingsStore = defineStore("readings", () => {
         }
     }
 
+    function includesTopic(topicId) {
+        if (!readings.value) return;
+
+        return readings.value.find((reading) => +reading.topic.id === +topicId);
+    }
+
     return {
         readings,
         loadReadings,
+        includesTopic,
     };
 });

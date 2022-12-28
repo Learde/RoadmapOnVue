@@ -8,6 +8,8 @@ import {
     deleteNode,
     addFavourite,
     deleteFavourite,
+    addRead,
+    deleteRead,
 } from "@api";
 import { showError } from "@packages";
 import {
@@ -17,9 +19,11 @@ import {
     IconHeartFill,
     IconHeartBold,
     IconHeartBreakFill,
+    IconBookmarkSimpleBold,
+    IconBookmarkSimpleFill,
 } from "@icons";
 import { stringEscape } from "@helpers";
-import { useUserStore, useFavouritesStore } from "@stores";
+import { useUserStore, useFavouritesStore, useReadingsStore } from "@stores";
 import BaseButton from "@uikit/BaseButton.vue";
 import VueTree from "@ssthouse/vue3-tree-chart";
 import { storeToRefs } from "pinia";
@@ -35,6 +39,8 @@ const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 const favouritesStore = useFavouritesStore();
 const favObject = computed(() => favouritesStore.includesTopic(props.id));
+const readingsStore = useReadingsStore();
+const readObject = computed(() => readingsStore.includesTopic(props.id));
 
 const doDelete = async () => {
     try {
@@ -107,8 +113,46 @@ const handleUnfollow = async () => {
         favouritesStore.loadFavourites();
     } catch (e) {
         showError({
-            title: "Ошибка добавления в избранное",
-            text: "Не удалось добавить в избранное, повторите попытку позже",
+            title: "Ошибка удаления из избранных",
+            text: "Не удалось удалить из избранных, повторите попытку позже",
+        });
+    }
+};
+const handleAddReading = async () => {
+    try {
+        const readingData = (
+            await addRead({
+                topicId: props.id,
+                userId: 1,
+            })
+        ).data;
+
+        if (readingData.error) throw "";
+
+        readingsStore.loadReadings();
+    } catch (e) {
+        showError({
+            title: "Ошибка добавления в читаемое",
+            text: "Не удалось добавить в читаемое, повторите попытку позже",
+        });
+    }
+};
+
+const handleRemoveReading = async () => {
+    try {
+        const readingData = (
+            await deleteRead({
+                id: readObject.value.id,
+            })
+        ).data;
+
+        if (readingData.error) throw "";
+
+        readingsStore.loadReadings();
+    } catch (e) {
+        showError({
+            title: "Ошибка удаления из читаемых",
+            text: "Не удалось удалить из читаемых, повторите попытку позже",
         });
     }
 };
@@ -163,6 +207,23 @@ onMounted(() => {
             <h4 class="topic-view__heading">
                 Просмотр дорожной карты #{{ id }}
             </h4>
+            <BaseButton
+                v-if="!readObject"
+                @click="handleAddReading"
+                size="sm"
+                variant="grey"
+            >
+                <IconBookmarkSimpleBold class="topic-view__heart" />
+            </BaseButton>
+            <BaseButton
+                class="topic-view__favourite"
+                v-else
+                @click="handleRemoveReading"
+                size="sm"
+                variant="green"
+            >
+                <IconBookmarkSimpleFill class="topic-view__heart" />
+            </BaseButton>
             <BaseButton
                 v-if="!favObject"
                 @click="handleFollow"
