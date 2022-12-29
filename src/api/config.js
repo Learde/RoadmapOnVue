@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = window.BASE_URL ?? "https://37d9-37-145-224-248.eu.ngrok.io/";
+const BASE_URL = window.BASE_URL ?? "http://127.0.0.1:3000/";
 let token = null;
 
 const httpInstance = axios.create({
